@@ -1,0 +1,7 @@
+CouchDB==1.1
+-e git+https://github.com/ComplaintResolution/models#egg=models
+oauthlib==2.0.0
+requests==2.11.1
+requests-oauthlib==0.7.0
+six==1.10.0
+tweepy==3.5.0
