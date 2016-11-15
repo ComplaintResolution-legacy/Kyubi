@@ -20,7 +20,7 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
 
 def main():
-    track = ['#LNMComplaint']
+    track = ['@LNMComplaint']
  
     listen = SListener(api)
     stream = tweepy.Stream(auth, listen)
