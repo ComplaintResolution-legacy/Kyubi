@@ -22,7 +22,7 @@ class SListener(StreamListener):
         return comment
 
     def on_status(self, status):
-
+        print("status arrived")
         if(status.in_reply_to_status_id is None and status.author.screen_name != self.api.auth.get_username()):
             timestamp = datetime.datetime.now()
             complaint = Complaint(
@@ -54,14 +54,18 @@ class SListener(StreamListener):
             self.api.update_status(reply_text, status.id)
 
         else:
+
             replied_to = self.api.get_status(status.in_reply_to_status_id)
             complaint = Complaint.get(status.in_reply_to_status_id_str)
             prev_comment = Comment.get(status.in_reply_to_status_id_str)
+            
 
-            if(complaint is not None):
+            if(complaint is not None and complaint.datatype == "Complaint"):
+
                 self._create_comment_from_status(status, complaint)
 
-            elif(prev_comment is not None):
+            elif(prev_comment is not None and complaint.datatype == "Comment"):
+
                 complaint = prev_comment.get_complaint()
                 self._create_comment_from_status(status, complaint, prev_comment)
 
@@ -69,10 +73,10 @@ class SListener(StreamListener):
                 complaint = Complaint.get(replied_to.in_reply_to_status_id_str)
                 prev_comment = Comment.get(replied_to.in_reply_to_status_id_str)
 
-                if(complaint is not None):
+                if(complaint is not None and complaint.datatype == "Complaint"):
                     self._create_comment_from_status(status, complaint)
 
-                elif(prev_comment is not None):
+                elif(prev_comment is not None and complaint.datatype == "Comment"):
                     complaint = prev_comment.get_complaint()
                     self._create_comment_from_status(status, complaint, prev_comment)
 
